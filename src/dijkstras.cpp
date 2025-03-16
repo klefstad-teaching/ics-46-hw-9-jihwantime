@@ -1,5 +1,5 @@
 #include "dijkstras.h"
-#include <algorithm>
+#include <algorithm> 
 
 vector<int> dijkstra_shortest_path(const Graph& G, int source, vector<int>& previous) {
     vector<int> dist(G.numVertices, INF);
@@ -35,7 +35,7 @@ vector<int> extract_shortest_path(const vector<int>& distances, const vector<int
     vector<int> path;
     
     if (distances[destination] == INF) {
-        return path;  
+        return path; 
     }
     
     for (int v = destination; v != -1; v = previous[v]) {
@@ -53,13 +53,10 @@ void print_path(const vector<int>& path, int total) {
         return;
     }
     
-    cout << "Path (total weight " << total << "): ";
-    
     for (size_t i = 0; i < path.size(); ++i) {
-        cout << path[i];
-        if (i < path.size() - 1) {
-            cout << " -> ";
-        }
+        cout << path[i] << " ";
     }
     cout << endl;
+    
+    cout << "Total cost is " << total << endl;
 }
