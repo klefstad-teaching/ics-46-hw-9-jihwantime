@@ -6,34 +6,17 @@ void error(string word1, string word2, string msg) {
     cerr << "Error: " << msg << " for words '" << word1 << "' and '" << word2 << "'" << endl;
 }
 
-bool edit_distance_within(const std::string& str1, const std::string& str2, int d) {
-    int len_diff = abs(int(str1.length()) - int(str2.length()));
-    if (len_diff > d) {
-        return false;
-    }
+bool edit_distance_within(const string& str1, const string& str2, int d) {
+    if (str1.size() != str2.size()) return false;
     
-    if (str1.length() == str2.length()) {
-        int diff = 0;
-        for (size_t i = 0; i < str1.length(); ++i) {
-            if (str1[i] != str2[i]) {
-                diff++;
-                if (diff > d) {
-                    return false;
-                }
-            }
-        }
-        return diff <= d;
-    }
-
-    const string& shorter = (str1.length() < str2.length()) ? str1 : str2;
-    const string& longer = (str1.length() < str2.length()) ? str2 : str1;
-    for (size_t i = 0, j = 0; i < shorter.length(); ++i, ++j) {
-        if (shorter[i] != longer[j]) {
-            return shorter.substr(i) == longer.substr(j + 1);
+    int diff_count = 0;
+    for (size_t i = 0; i < str1.size(); ++i) {
+        if (str1[i] != str2[i]) {
+            diff_count++;
+            if (diff_count > d) return false;
         }
     }
-    
-    return true;
+    return diff_count <= d;
 }
 
 bool is_adjacent(const string& word1, const string& word2) {
