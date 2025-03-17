@@ -43,27 +43,13 @@ bool is_adjacent(const string& word1, const string& word2) {
 vector<string> generate_word_ladder(const string& begin_word, const string& end_word, const set<string>& word_list) {
     if (word_list.find(end_word) == word_list.end()) {
         error(begin_word, end_word, "End word not in the word list");
-        vector<string> empty;
-        return empty;
+        return {};
     }
     
     if (begin_word == end_word) {
-        vector<string> empty;
-        return empty;
+        return {begin_word};
     }
 
-    map<string, vector<string>> wildcard_map;
-    
-    for (const string& word : word_list) {
-        for (size_t i = 0; i < word.length(); i++) {
-            string pattern = word;
-            pattern[i] = '*';  
-            wildcard_map[pattern].push_back(word);
-        }
-        
-        wildcard_map["+" + word].push_back(word);  
-    }
-    
     queue<vector<string>> ladder_queue;
     set<string> visited;
     
@@ -76,44 +62,20 @@ vector<string> generate_word_ladder(const string& begin_word, const string& end_
         
         string last_word = current_ladder.back();
         
-        for (size_t i = 0; i < last_word.length(); i++) {
-            string pattern = last_word;
-            pattern[i] = '*';
-            
-            for (const string& candidate : wildcard_map[pattern]) {
-                if (visited.find(candidate) != visited.end() || candidate == last_word) {
-                    continue;
-                }
-                
-                if (is_adjacent(last_word, candidate)) {
-                    vector<string> new_ladder = current_ladder;
-                    new_ladder.push_back(candidate);
-                    
-                    if (candidate == end_word) {
-                        return new_ladder;
-                    }
-                    
-                    visited.insert(candidate);
-                    ladder_queue.push(new_ladder);
-                }
-            }
-        }
-        
-        for (const string& candidate : word_list) {
-            if (visited.find(candidate) != visited.end() || 
-                abs(int(candidate.length()) - int(last_word.length())) != 1) {
+        for (const string& word : word_list) {
+            if (visited.find(word) != visited.end()) {
                 continue;
             }
             
-            if (is_adjacent(last_word, candidate)) {
+            if (is_adjacent(last_word, word)) {
                 vector<string> new_ladder = current_ladder;
-                new_ladder.push_back(candidate);
+                new_ladder.push_back(word);
                 
-                if (candidate == end_word) {
+                if (word == end_word) {
                     return new_ladder;
                 }
                 
-                visited.insert(candidate);
+                visited.insert(word);
                 ladder_queue.push(new_ladder);
             }
         }
