@@ -1,5 +1,6 @@
 #include "ladder.h"
 #include <algorithm> 
+#define my_assert(e) {cout << #e << ((e) ? " passed": " failed") << endl;}
 
 void error(string word1, string word2, string msg) {
     cerr << "Error: " << msg << " for words '" << word1 << "' and '" << word2 << "'" << endl;
@@ -42,11 +43,13 @@ bool is_adjacent(const string& word1, const string& word2) {
 vector<string> generate_word_ladder(const string& begin_word, const string& end_word, const set<string>& word_list) {
     if (word_list.find(end_word) == word_list.end()) {
         error(begin_word, end_word, "End word not in the word list");
-        return {};
+        vector<string> empty;
+        return empty;
     }
     
     if (begin_word == end_word) {
-        return {begin_word};
+        vector<string> empty;
+        return empty;
     }
 
     map<string, vector<string>> wildcard_map;
@@ -138,7 +141,7 @@ void load_words(set<string>& word_list, const string& file_name) {
 
 void print_word_ladder(const vector<string>& ladder) {
     if (ladder.empty()) {
-        cout << "No ladder" << endl;
+        cout << "No word ladder found." << endl;
         return;
     }
     
@@ -151,5 +154,21 @@ void print_word_ladder(const vector<string>& ladder) {
 }
 
 void verify_word_ladder() {
-    return;
+
+    set<string> word_list;
+
+    load_words(word_list, "words.txt");
+
+    my_assert(generate_word_ladder("cat", "dog", word_list).size() == 4);
+
+    my_assert(generate_word_ladder("marty", "curls", word_list).size() == 6);
+
+    my_assert(generate_word_ladder("code", "data", word_list).size() == 6);
+
+    my_assert(generate_word_ladder("work", "play", word_list).size() == 6);
+
+    my_assert(generate_word_ladder("sleep", "awake", word_list).size() == 8);
+
+    my_assert(generate_word_ladder("car", "cheat", word_list).size() == 4);
+
 }
