@@ -5,7 +5,7 @@
 vector<int> dijkstra_shortest_path(const Graph& G, int source, vector<int>& previous) {
     int n = G.numVertices;
     vector<int> dist(n, INF);
-    previous.resize(n, -1);
+    previous.assign(n, -1);  
     vector<bool> visited(n, false);
     
     dist[source] = 0;
@@ -40,7 +40,7 @@ vector<int> dijkstra_shortest_path(const Graph& G, int source, vector<int>& prev
 
 vector<int> extract_shortest_path(const vector<int>& distances, const vector<int>& previous, int destination) {
     vector<int> path;
-    
+
     if (destination < 0 || destination >= static_cast<int>(distances.size()) || 
         distances[destination] == INF) {
         return path; 
